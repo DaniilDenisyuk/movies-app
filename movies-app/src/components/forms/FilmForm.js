@@ -63,8 +63,8 @@ export const FilmForm = ({ handleSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="film-form">
-      <h2 className="film-form__heading">
+    <form onSubmit={handleFormSubmit} className="form">
+      <h2 className="form__heading">
         Заполните форму,
         <br />
         что бы добавить фильм:
@@ -72,7 +72,7 @@ export const FilmForm = ({ handleSubmit }) => {
       <input
         type="text"
         placeholder="Название"
-        className={cn("film-form__input", {
+        className={cn("form__input", {
           invalid: !title.isPristine && !title.isValid,
         })}
         onChange={(e) => {
@@ -89,7 +89,7 @@ export const FilmForm = ({ handleSubmit }) => {
       <input
         type="text"
         placeholder="Год выпуска (1850-сейчас)"
-        className={cn("film-form__input", {
+        className={cn("form__input", {
           invalid: !year.isPristine && !year.isValid,
         })}
         onChange={(e) => {
@@ -106,7 +106,7 @@ export const FilmForm = ({ handleSubmit }) => {
       <select
         required
         defaultValue=""
-        className={cn("film-form__input", {
+        className={cn("form__input", {
           invalid: !format.isPristine && !format.isValid,
         })}
         onChange={(e) => {
@@ -130,7 +130,7 @@ export const FilmForm = ({ handleSubmit }) => {
       <input
         type="text"
         placeholder="Актёры (допустимы только единичные комы и тире)"
-        className={cn("film-form__input", {
+        className={cn("form__input", {
           invalid: !stars.isPristine && !stars.isValid,
         })}
         onChange={(e) => {
@@ -144,7 +144,7 @@ export const FilmForm = ({ handleSubmit }) => {
           });
         }}
       />
-      <button type="submit" className="film-form__submit">
+      <button type="submit" className="form__submit">
         Подтвердить
       </button>
     </form>

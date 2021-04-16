@@ -1,0 +1,27 @@
+.header {
+  background-color: #282c34;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  height: 50px;
+  position: relative;
+  &__heading {
+    font-size: 30px;
+    position: absolute;
+    text-transform: uppercase;
+  }
+  &__buttons {
+    display: flex;
+    margin-left: auto;
+    margin-right: 100px;
+  }
+  &__button {
+    &--auth {
+    }
+    &--reg {
+    }
+  }
+}

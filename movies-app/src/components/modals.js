@@ -5,6 +5,6 @@ import Modal from "./HOCs/Modal";
 
 export const ConfirmModal = Modal(Confirm);
 export const AuthFormModal = Modal(AuthForm);
-export const RefgisterFormModal = Modal(RegisterForm);
+export const RegistrFormModal = Modal(RegisterForm);
 export const FilmFormModal = Modal(FilmForm);
 export const FilmInfoModal = Modal(FilmInfo);

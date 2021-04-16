@@ -1,3 +1,8 @@
+CREATE SCHEMA movies;
+CREATE SCHEMA users;
+
+SET search_path TO movies,public;
+
 CREATE TABLE Movie (
   Id serial,
   Title varchar(127) NOT NULL,
@@ -36,12 +41,12 @@ ADD
   CONSTRAINT pkActorMovie PRIMARY KEY (MovieId, ActorId);
 
 ALTER TABLE
-  ActorMovie
+  Movies.ActorMovie
 ADD
   CONSTRAINT fkActorMovieMovieId FOREIGN KEY (MovieId) REFERENCES Movie (Id) ON DELETE CASCADE;
 
 ALTER TABLE
-  ActorMovie
+  Movies.ActorMovie
 ADD
   CONSTRAINT fkActorMovieActorId FOREIGN KEY (ActorId) REFERENCES Actor (Id) ON DELETE CASCADE;
 
@@ -110,6 +115,7 @@ RETURN retMovieId;
 END;
 $$ LANGUAGE plpgsql;
 
+SET search_path TO users,public;
 
 CREATE TABLE User (
   Id serial,

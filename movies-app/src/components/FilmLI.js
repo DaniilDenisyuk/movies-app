@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { connect } from "react-redux";
 import { removeFilm } from "../redux/actionCreators/films";
-import { FilmInfoModal, ConfirmDeletionModal } from "./modals";
+import { FilmInfoModal, ConfirmModal } from "./modals";
 import { useState } from "react";
 
 const FilmLI = ({ className, film, removeFilm }) => {
@@ -24,7 +24,7 @@ const FilmLI = ({ className, film, removeFilm }) => {
         <FilmInfoModal handleClose={() => setInfoOpened(false)} film={film} />
       )}
       {confirmOpened && (
-        <ConfirmDeletionModal
+        <ConfirmModal
           handleClose={() => setConfirmOpened(false)}
           onConfirm={() => {
             removeFilm(film.id);

@@ -1,10 +1,10 @@
 import cn from "classnames";
 import { connect } from "react-redux";
-import FilmLI from "../FilmLI";
-import { FilmFormModal } from "../modals";
+import FilmLI from "../components/FilmLI";
+import { FilmFormModal } from "../components/modals";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./ToastMessage.scss";
+import "../components/ToastMessage.scss";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -14,7 +14,7 @@ import {
   postFilmsFile,
   setOrder,
   setSorting,
-} from "../../redux/actionCreators/films";
+} from "../redux/actionCreators/films";
 
 const filterByKey = (list, key, value) =>
   list.filter((li) => li[key].toUpperCase().includes(value.toUpperCase()));
@@ -46,7 +46,7 @@ const FilmList = ({ className, films }) => {
   return <ul className={cn(className, "film-list")}>{filmItems}</ul>;
 };
 
-const FilmPage = ({
+const FilmsPage = ({
   films,
   isLoading,
   fetchFilms,
@@ -226,4 +226,4 @@ const mapDispatch = {
   setSorting,
 };
 
-export default connect(mapState, mapDispatch)(FilmPage);
+export default connect(mapState, mapDispatch)(FilmsPage);

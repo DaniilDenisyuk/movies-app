@@ -1,0 +1,36 @@
+.home {
+  margin-top: 100px;
+  &__title {
+    margin-bottom: 100px;
+    font-size: 35px;
+    font-weight: bolder;
+  }
+  &__wrapper {
+    grid-template-columns: 1fr 1fr 1fr;
+    display: grid;
+  }
+  &__heading {
+    font-size: 25px;
+    font-weight: bolder;
+    margin-bottom: 15px;
+  }
+  &__routes {
+    &--public {
+      grid-column: 1;
+    }
+    &--private {
+      grid-column: 3;
+    }
+    &--admin {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+  &__route {
+    font-size: 20px;
+    font-style: italic;
+    display: block;
+    padding: 5px;
+    margin: 5px;
+  }
+}
