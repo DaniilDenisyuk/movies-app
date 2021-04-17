@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
-const Profiles = () => {
+export const Profiles = () => {
   return (
     <section className="home">
       <div className={cn("home__routes", "home__routes--public")}>
@@ -25,5 +25,3 @@ const Profiles = () => {
     </section>
   );
 };
-
-export default Profiles;

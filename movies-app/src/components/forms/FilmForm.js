@@ -8,7 +8,7 @@ import {
   limitNumbers,
   uniqueNames,
 } from "../../shared/validations";
-// I can extract it to some generic element later
+
 export const FilmForm = ({ handleSubmit }) => {
   const [title, setTitle] = useState({
     isPristine: true,

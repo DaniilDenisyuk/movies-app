@@ -110,10 +110,10 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: inherit; /* 1 */
-  font-size: 100%; /* 1 */
-  line-height: 1.15; /* 1 */
-  margin: 0; /* 2 */
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
 }
 
 button,
@@ -148,16 +148,6 @@ li {
 
 .body {
   flex-grow: 1;
-}
-
-.footer {
-  display: flex;
-  height: 50px;
-  flex-shrink: 0;
-  color: white;
-  align-items: center;
-  justify-content: center;
-  background-color: #282c34;
 }
 
 .row {

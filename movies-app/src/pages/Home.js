@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import cn from "classnames";
 import "./Home.scss";
 
-const Home = () => {
+export const Home = () => {
   return (
     <section className="home">
       <h2 className="home__title">Доступные разделы</h2>
@@ -32,5 +32,3 @@ const Home = () => {
     </section>
   );
 };
-
-export default Home;

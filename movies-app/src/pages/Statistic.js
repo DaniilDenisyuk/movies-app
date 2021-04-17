@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
-const Statistic = () => {
+export const Statistic = () => {
   return (
     <section className="home">
       <div className={cn("home__routes", "home__routes--public")}>
@@ -26,4 +26,3 @@ const Statistic = () => {
   );
 };
 
-export default Statistic;
