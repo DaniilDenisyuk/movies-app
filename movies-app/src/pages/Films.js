@@ -11,7 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   fetchFilms,
   postFilm,
-  postFilmsFile,
+  postFile,
   setOrder,
   setSorting,
 } from "../redux/actionCreators/films";
@@ -221,7 +221,7 @@ const mapState = (state) => {
 const mapDispatch = {
   fetchFilms,
   postFilm,
-  postFilmsFile,
+  postFilmsFile: postFile,
   setOrder,
   setSorting,
 };

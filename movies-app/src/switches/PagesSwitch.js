@@ -36,7 +36,7 @@ const PagesSwitch = () => {
         </Route>
         <Route path="/home" children={<Home />} />
         <Route path="/films" children={<Films />} />
-        <PrivateRoute path="/profile" component={UserInfo} />
+        <PrivateRoute path="/user" component={UserInfo} />
         <PrivateRoute path="/profiles" component={Profiles} />
         <PrivateRoute
           path="/admin"

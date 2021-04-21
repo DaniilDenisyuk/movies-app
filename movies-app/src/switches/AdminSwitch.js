@@ -1,8 +1,5 @@
 import { Route, Redirect, Switch } from "react-router-dom";
-import Profiles from "../pages/Profiles";
-import { UserInfo } from "../pages/UserInfo";
-import Statistic from "../pages/Statistic";
-import Users from "../pages/Users";
+import { UserInfo, Profiles, Statistic, Users } from "../pages";
 
 const AdminSwitch = (props) => {
   return (

@@ -1,10 +1,7 @@
 import filmsAT from "../actionTypes/films";
 const initialState = {
   isLoading: true,
-  message: {
-    type: null,
-    text: "",
-  },
+  isFailed: false,
   list: [],
   sorting: null,
   order: "ASC",
@@ -24,6 +21,7 @@ const films = (state = initialState, action) => {
       const { films } = action.payload;
       return {
         ...state,
+        isFailed: false,
         isLoading: false,
         list: films,
       };
@@ -50,11 +48,9 @@ const films = (state = initialState, action) => {
       };
     }
     case filmsAT.LOADING_FAILED: {
-      const { message } = action.payload;
       return {
         ...state,
-        message: { text: message, type: 0 },
-        isLoading: false,
+        isFailed: true,
       };
     }
     case filmsAT.FILMS_LOADING: {

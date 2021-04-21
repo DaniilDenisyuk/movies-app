@@ -2,7 +2,7 @@ import { useContext } from "react";
 import cn from "classnames";
 import "./Header.scss";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../hooks/UserContext";
+import { UserContext } from "../hooks/userContext";
 import useLogout from "./../hooks/useLogout";
 import Button from "./Button";
 
@@ -15,14 +15,17 @@ const Header = () => {
     <header className="header">
       <h2 className="header__heading">Movies viewer</h2>
       {user ? (
-        <div className="header__buttons">
-          <Button
-            onClick={logoutUser}
-            className={cn("header__button", "header__button--logout")}
-          >
-            Выйти
-          </Button>
-        </div>
+        <>
+          <p className="header__user-name"></p>
+          <div className="header__buttons">
+            <Button
+              onClick={logoutUser}
+              className={cn("header__button", "header__button--logout")}
+            >
+              Выйти
+            </Button>
+          </div>
+        </>
       ) : (
         <div className="header__buttons">
           <Link

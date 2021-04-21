@@ -1,7 +1,7 @@
 import { FilmForm, AuthForm, RegisterForm } from "./forms";
 import FilmInfo from "./FilmInfo";
 import Confirm from "./Confirm";
-import Modal from "./HOCs/Modal";
+import Modal from "../HOCs/Modal";
 
 export const ConfirmModal = Modal(Confirm);
 export const AuthFormModal = Modal(AuthForm);

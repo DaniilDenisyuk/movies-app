@@ -1,4 +1,4 @@
-import { useClickOutside, useDisableScroll } from "../../hooks";
+import { useClickOutside, useDisableScroll } from "../hooks";
 import { useRef } from "react";
 import cn from "classnames";
 import "./Modal.scss";
