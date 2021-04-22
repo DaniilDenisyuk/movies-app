@@ -1,10 +1,10 @@
 import { API_URL } from "../shared/apiUrl";
 
-const login = (username, password) => {
+const login = (login, password) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ login, password }),
   };
 
   return fetch(`${API_URL}/users/authenticate`, requestOptions).then(
@@ -12,11 +12,11 @@ const login = (username, password) => {
   );
 };
 
-const register = (username, password) => {
+const register = (userInfo) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(userInfo),
   };
   return fetch(`${API_URL}/users/register`, requestOptions).then(
     handleResponse
@@ -45,28 +45,6 @@ const refreshToken = () => {
     });
 };
 
-const getAllUsers = (token) => {
-  if (!token) return;
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  return fetch(`${API_URL}/users`, requestOptions).then(handleResponse);
-};
-
-const getAllProfiles = (id, token) => {
-  if (!token) return;
-  const requestOptions = {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  return fetch(`${API_URL}/users/${id}/profiles`, requestOptions).then(
-    handleResponse
-  );
-};
-
 const handleResponse = (response) => {
   return response.text().then((text) => {
     const data = text && JSON.parse(text);
@@ -84,11 +62,9 @@ const handleResponse = (response) => {
   });
 };
 
-export const usersService = {
+export const authService = {
   login,
   register,
   logout,
   refreshToken,
-  getAllUsers,
-  getAllProfiles,
 };

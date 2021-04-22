@@ -1,9 +1,9 @@
 import { Films, Home, Profiles, UserInfo } from "../pages";
 import AdminSwitch from "./AdminSwitch";
 import { PrivateRoute } from "./PrivateRoute";
-import { AuthFormModal, RegistrFormModal } from "../components/modals";
-import { ROLES } from "../shared/roles";
-import { login, register } from "../redux/actionCreators/users";
+import { AuthFormModal, RegistrFormModal } from "../modals";
+import { ROLES } from "../../shared/roles";
+import { login, register } from "../../redux/actionCreators/users";
 
 import { connect } from "react-redux";
 import {
@@ -13,7 +13,7 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import Loading from "../components/Loading";
+import Loading from "../Loading";
 
 const PagesSwitch = ({ login, register }) => {
   const location = useLocation();

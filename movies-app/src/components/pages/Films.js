@@ -1,7 +1,7 @@
 import cn from "classnames";
 import { connect } from "react-redux";
-import FilmLI from "../components/FilmLI";
-import { FilmFormModal } from "../components/modals";
+import FilmLI from "../FilmLI";
+import { FilmFormModal } from "../modals";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../components/ToastMessage.scss";
@@ -14,7 +14,7 @@ import {
   postFile,
   setOrder,
   setSorting,
-} from "../redux/actionCreators/films";
+} from "../../redux/actionCreators/films";
 
 const filterByKey = (list, key, value) =>
   list.filter((li) => li[key].toUpperCase().includes(value.toUpperCase()));

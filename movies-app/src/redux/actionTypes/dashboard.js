@@ -1,0 +1,7 @@
+const dashboardAT = {
+  DASHBOARD_LOADING: "DASHBOARD_LOADING",
+  ADD_INFO: "DASHBOARD_ADD_INFO",
+  LOADING_FAILED: "DASHBOARD_LOADING_FAILED",
+};
+
+export default dashboardAT;

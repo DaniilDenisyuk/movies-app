@@ -63,7 +63,6 @@ const mapState = (state) => {
 };
 
 const mapDispatch = {
-  refreshToken,
   logout,
 };
 

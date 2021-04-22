@@ -1,5 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
-import Loading from "../components/Loading";
+import Loading from "../Loading";
 import { connect } from "react-redux";
 
 const PrivateRoute = ({

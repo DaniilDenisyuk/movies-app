@@ -1,8 +1,9 @@
 import usersAT from "../actionTypes/users";
 import { usersService } from "../../services";
-import { addError, addInfo, addSuccess } from "./messages";
+import { messagesActions } from "./messages";
+const { addError, addInfo, addSuccess } = messagesActions;
 
-export const login = (username, password) => (dispatch) => {
+const login = (username, password) => (dispatch) => {
   const request = (user) => {
     return { type: usersAT.LOGIN_REQUEST, user };
   };
@@ -26,7 +27,7 @@ export const login = (username, password) => (dispatch) => {
   );
 };
 
-export const register = (username, password) => (dispatch) => {
+const register = (username, password) => (dispatch) => {
   const request = () => {
     return { type: usersAT.REGISTER_REQUEST };
   };
@@ -51,7 +52,7 @@ export const register = (username, password) => (dispatch) => {
   );
 };
 
-export const logout = (token) => (dispatch) => {
+const logout = (token) => (dispatch) => {
   return usersService.logout(token).then(
     () => {
       dispatch({ type: usersAT.LOGOUT });
@@ -63,7 +64,7 @@ export const logout = (token) => (dispatch) => {
   );
 };
 
-export const refreshToken = (user) => (dispatch) => {
+const refreshToken = (user) => (dispatch) => {
   const request = (user) => {
     return { type: usersAT.LOGIN_REQUEST, user };
   };
@@ -86,7 +87,7 @@ export const refreshToken = (user) => (dispatch) => {
   );
 };
 
-export const getAllUsers = (token) => {
+const getAllUsers = (token) => {
   const request = () => {
     return { type: usersAT.GET_ALL_USERS_REQUEST };
   };
@@ -109,7 +110,7 @@ export const getAllUsers = (token) => {
   };
 };
 
-export const getAllProfiles = (userId, token) => {
+const getAllProfiles = (userId, token) => {
   const request = () => {
     return { type: usersAT.GET_ALL_PROFILES_REQUEST };
   };
@@ -131,4 +132,13 @@ export const getAllProfiles = (userId, token) => {
       }
     );
   };
+};
+
+export const usersActions = {
+  getAllProfiles,
+  getAllUsers,
+  login,
+  logout,
+  refreshToken,
+  register,
 };

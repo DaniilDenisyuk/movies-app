@@ -1,42 +1,44 @@
 import filmsAT from "../actionTypes/films";
-import { addError, addInfo, addSuccess } from "./messages";
+import { messagesActions } from "./messages";
 import { filmsService } from "../../services";
 
-export const addFilm = (film) => ({
+const { addError, addInfo, addSuccess } = messagesActions;
+
+const addFilm = (film) => ({
   type: filmsAT.ADD_FILM,
   payload: { film },
 });
 
-export const filmsLoading = () => ({
+const filmsLoading = () => ({
   type: filmsAT.FILMS_LOADING,
 });
 
-export const loadingFailed = (message) => ({
+const loadingFailed = (message) => ({
   type: filmsAT.LOADING_FAILED,
   payload: { message },
 });
 
-export const addFilms = (films) => ({
+const addFilms = (films) => ({
   type: filmsAT.ADD_FILMS,
   payload: { films },
 });
 
-export const deleteFilm = (id) => ({
+const deleteFilm = (id) => ({
   type: filmsAT.DELETE_FILM,
   payload: { id },
 });
 
-export const setSorting = (sortFunc) => ({
+const setSorting = (sortFunc) => ({
   type: filmsAT.SET_SORTING,
   payload: { sortFunc },
 });
 
-export const setOrder = (order) => ({
+const setOrder = (order) => ({
   type: filmsAT.SET_ORDER,
   payload: { order },
 });
 
-export const fetchFilms = () => (dispatch) => {
+const fetchFilms = () => (dispatch) => {
   dispatch(filmsLoading());
   return filmsService
     .getAll()
@@ -50,7 +52,7 @@ export const fetchFilms = () => (dispatch) => {
     });
 };
 
-export const postFilm = (film) => (dispatch) => {
+const postFilm = (film) => (dispatch) => {
   return filmsService
     .postOne()
     .then((id) => {
@@ -62,7 +64,7 @@ export const postFilm = (film) => (dispatch) => {
     });
 };
 
-export const postFile = (file) => (dispatch) => {
+const postFile = (file) => (dispatch) => {
   return filmsService
     .postFile(file)
     .then(() => {
@@ -74,7 +76,7 @@ export const postFile = (file) => (dispatch) => {
     });
 };
 
-export const removeFilm = (id) => (dispatch) => {
+const removeFilm = (id) => (dispatch) => {
   return filmsService
     .deleteOne(id)
     .then((id) => {
@@ -84,4 +86,17 @@ export const removeFilm = (id) => (dispatch) => {
     .catch((error) => {
       dispatch(addError("Film could not be deleted\nError: " + error.message));
     });
+};
+
+export const filmsActions = {
+  addFilm,
+  filmsLoading,
+  removeFilm,
+  postFile,
+  postFilm,
+  deleteFilm,
+  fetchFilms,
+  setOrder,
+  setSorting,
+  addFilms,
 };

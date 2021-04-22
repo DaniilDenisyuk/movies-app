@@ -1,4 +1,4 @@
-import { Route, Redirect, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { UserInfo, Profiles, Statistic, Users } from "../pages";
 
 const AdminSwitch = ({ match }) => {
