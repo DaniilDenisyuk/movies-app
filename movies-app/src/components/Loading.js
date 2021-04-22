@@ -1,8 +1,9 @@
 import "Loading.scss";
+import cn from "classnames";
 
-const Loading = () => (
-  <p className="loading">
-    Загрузка
+const Loading = ({ className, message }) => (
+  <p className={cn(className, "loading")}>
+    {message ? message : "Загрузка"}
     <span className="loading__dots"></span>
   </p>
 );

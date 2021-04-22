@@ -1,14 +1,19 @@
-import { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { UserContext } from "../hooks/userContext";
 import Loading from "../components/Loading";
+import { connect } from "react-redux";
 
-export const PrivateRoute = ({ component: Component, roles, ...rest }) => {
-  const { user, isLoading } = useContext(UserContext);
-  if (isLoading) {
-    return <Loading />;
+const PrivateRoute = ({
+  component: Component,
+  roles,
+  user,
+  isLoggedIn,
+  isLoggingIn,
+  ...rest
+}) => {
+  if (isLoggingIn) {
+    return <Loading message="Вход" />;
   }
-  if (user) {
+  if (isLoggedIn) {
     if (roles && roles.indexOf(user.role) === -1) {
       return <Redirect to={{ pathname: "/home" }} />;
     }
@@ -16,3 +21,10 @@ export const PrivateRoute = ({ component: Component, roles, ...rest }) => {
   }
   return <Redirect to="/login" />;
 };
+
+const mapState = (state) => {
+  const { isLoggingIn, isLoggedIn, user } = state.auth;
+  return { isLoggingIn, isLoggedIn, user };
+};
+
+export default connect(mapState)(PrivateRoute);

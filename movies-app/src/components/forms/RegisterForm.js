@@ -1,18 +1,27 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import cn from "classnames";
 import Button from "../Button";
 import { email, mediumPassword } from "../../shared/validations";
 
-export const RegisterForm = ({ handleSubmit }) => {
+export const RegisterForm = ({
+  handleSubmit,
+  submitComponent: Component,
+  submitMessage,
+}) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     handleSubmit: fromSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur", defaultValues: { email: "", password: "" } });
-  const onSubmit = (data, e) => {
-    handleSubmit(data);
+  const onSubmit = async (data, e) => {
+    setIsSubmitting(true);
+    await handleSubmit(data);
+    setIsSubmitting(false);
   };
   const onError = (errors, e) => console.log(errors, e);
+
   return (
     <form onSubmit={fromSubmit(onSubmit, onError)} className="form">
       <h2 className="form__heading">Регистрация</h2>
@@ -49,7 +58,17 @@ export const RegisterForm = ({ handleSubmit }) => {
         )}
       </div>
       <Button type="submit" className="form__submit">
-        Зарегистрироваться
+        {isSubmitting ? (
+          Component ? (
+            <Component message={submitMessage ? submitMessage : ""} />
+          ) : submitMessage ? (
+            submitMessage
+          ) : (
+            "Регистрация..."
+          )
+        ) : (
+          "Зарегистрироваться"
+        )}
       </Button>
     </form>
   );

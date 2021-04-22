@@ -3,7 +3,9 @@ import AdminSwitch from "./AdminSwitch";
 import { PrivateRoute } from "./PrivateRoute";
 import { AuthFormModal, RegistrFormModal } from "../components/modals";
 import { ROLES } from "../shared/roles";
+import { login, register } from "../redux/actionCreators/users";
 
+import { connect } from "react-redux";
 import {
   Switch,
   Route,
@@ -11,8 +13,9 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
+import Loading from "../components/Loading";
 
-const PagesSwitch = () => {
+const PagesSwitch = ({ login, register }) => {
   const location = useLocation();
   const history = useHistory();
   const background = location.state && location.state.background;
@@ -22,11 +25,11 @@ const PagesSwitch = () => {
   };
   const handleRegistr = (data) => {
     console.log("registr", data);
-    back();
+    register(data).then(() => back());
   };
   const handleAuth = (data) => {
     console.log("auth", data);
-    back();
+    login(data).then(() => back());
   };
   return (
     <>
@@ -64,13 +67,18 @@ const PagesSwitch = () => {
           <Route
             path="/login"
             children={
-              <AuthFormModal handleSubmit={handleAuth} handleClose={back} />
+              <AuthFormModal
+                submitComponent={Loading}
+                handleSubmit={handleAuth}
+                handleClose={back}
+              />
             }
           />
           <Route
             path="/registr"
             children={
               <RegistrFormModal
+                submitComponent={Loading}
                 handleSubmit={handleRegistr}
                 handleClose={back}
               />
@@ -82,4 +90,9 @@ const PagesSwitch = () => {
   );
 };
 
-export default PagesSwitch;
+const mapDispatch = {
+  login,
+  register,
+};
+
+export default connect(null, mapDispatch)(PagesSwitch);

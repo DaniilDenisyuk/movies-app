@@ -1,5 +1,4 @@
 import { API_URL } from "../shared/apiUrl";
-import { authHeader } from "../_helpers";
 
 const getAll = () => {
   return fetch(`${API_URL}/movies`).then(handleResponse);

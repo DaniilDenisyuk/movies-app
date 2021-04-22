@@ -16,6 +16,14 @@ const authentication = (state = {}, action) => {
       return {};
     case usersAT.LOGOUT:
       return {};
+    case usersAT.REGISTER_REQUEST:
+      return {
+        isRegistering: true,
+      };
+    case usersAT.REGISTER_SUCCESS:
+      return {};
+    case usersAT.REGISTER_FAILURE:
+      return {};
     default:
       return state;
   }

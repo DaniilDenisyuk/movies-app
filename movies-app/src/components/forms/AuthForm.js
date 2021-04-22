@@ -1,16 +1,23 @@
 import { useForm } from "react-hook-form";
-
+import { useState } from "react";
 import cn from "classnames";
 import Button from "../Button";
 
-export const AuthForm = ({ handleSubmit }) => {
+export const AuthForm = ({
+  handleSubmit,
+  submitComponent: Component,
+  submitMessage,
+}) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     handleSubmit: formSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur", defaultValues: { login: "", password: "" } });
-  const onSubmit = (data, e) => {
-    handleSubmit(data);
+  const onSubmit = async (data, e) => {
+    setIsSubmitting(true);
+    await handleSubmit(data);
+    setIsSubmitting(false);
   };
   const onError = (errors, e) => console.log(errors, e);
   return (
@@ -45,7 +52,17 @@ export const AuthForm = ({ handleSubmit }) => {
         )}
       </div>
       <Button type="submit" className="form__submit">
-        Войти
+        {isSubmitting ? (
+          Component ? (
+            <Component message={submitMessage ? submitMessage : ""} />
+          ) : submitMessage ? (
+            submitMessage
+          ) : (
+            "Вход..."
+          )
+        ) : (
+          "Войти"
+        )}
       </Button>
     </form>
   );

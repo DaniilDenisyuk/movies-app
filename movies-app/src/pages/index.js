@@ -1,6 +1,6 @@
 export * as Films from "./Films";
 export * from "./Home";
-export * from "./PrivateRoute";
+export * as PrivateRoute from "./PrivateRoute";
 export * from "./Profiles";
 export * from "../switches/AdminSwitch";
 export * from "./Statistic";

@@ -1,31 +1,34 @@
-import { useContext } from "react";
 import cn from "classnames";
 import "./Header.scss";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../hooks/userContext";
-import useLogout from "./../hooks/useLogout";
 import Button from "./Button";
+import Loading from "./Loading";
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import { refreshToken, logout } from "../redux/actionCreators/users";
 
-const Header = () => {
+const Header = ({ refreshToken, logout, user, isLoggingIn, isLoggedIn }) => {
   const location = useLocation();
-  const { user } = useContext(UserContext);
-  const { logoutUser } = useLogout();
-
+  useEffect(() => {
+    refreshToken();
+  }, [refreshToken]);
   return (
     <header className="header">
       <h2 className="header__heading">Movies viewer</h2>
-      {user ? (
-        <>
-          <p className="header__user-name"></p>
-          <div className="header__buttons">
-            <Button
-              onClick={logoutUser}
-              className={cn("header__button", "header__button--logout")}
-            >
-              Выйти
-            </Button>
-          </div>
-        </>
+      {isLoggingIn ? (
+        <Loading className="header__user-name" message="Вход" />
+      ) : (
+        isLoggedIn && <p className="header__user-name">{user.username}</p>
+      )}
+      {isLoggedIn ? (
+        <div className="header__buttons">
+          <Button
+            onClick={() => logout(user.jwt)}
+            className={cn("header__button", "header__button--logout")}
+          >
+            Выйти
+          </Button>
+        </div>
       ) : (
         <div className="header__buttons">
           <Link
@@ -54,4 +57,14 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapState = (state) => {
+  const { isLoggingIn, isLoggedIn, user } = state.auth;
+  return { isLoggingIn, isLoggedIn, user };
+};
+
+const mapDispatch = {
+  refreshToken,
+  logout,
+};
+
+export default connect(mapState, mapDispatch)(Header);
