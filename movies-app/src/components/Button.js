@@ -1,9 +1,13 @@
 import "./Button.scss";
 import cn from "classnames";
 
-const Button = ({ className, type, children }) => {
+const Button = ({ className, type, handleClick, children }) => {
   return (
-    <button type={type} className={cn(className, "button")}>
+    <button
+      type={type}
+      className={cn(className, "button")}
+      onClick={handleClick}
+    >
       {children}
     </button>
   );

@@ -1,6 +1,6 @@
-import usersAT from "../actionTypes/users";
-import { usersService } from "../../services";
-import { messagesActions } from "./messages";
+import usersAT from "../actionTypes/user";
+import { usersProfilesService } from "../../services";
+import { messagesActions } from "./message";
 const { addError, addInfo, addSuccess } = messagesActions;
 
 const login = (username, password) => (dispatch) => {
@@ -16,7 +16,7 @@ const login = (username, password) => (dispatch) => {
 
   dispatch(request(username));
 
-  return usersService.login(username, password).then(
+  return usersProfilesService.login(username, password).then(
     (user) => {
       dispatch(success(user));
     },
@@ -40,7 +40,7 @@ const register = (username, password) => (dispatch) => {
 
   dispatch(request());
 
-  return usersService.register(username, password).then(
+  return usersProfilesService.register(username, password).then(
     () => {
       dispatch(success());
       dispatch(addSuccess("Succesfully registered"));
@@ -53,7 +53,7 @@ const register = (username, password) => (dispatch) => {
 };
 
 const logout = (token) => (dispatch) => {
-  return usersService.logout(token).then(
+  return usersProfilesService.logout(token).then(
     () => {
       dispatch({ type: usersAT.LOGOUT });
       dispatch(addInfo("Logged out"));
@@ -75,7 +75,7 @@ const refreshToken = (user) => (dispatch) => {
     return { type: usersAT.LOGIN_FAILURE };
   };
   dispatch(request(user));
-  return usersService.refreshToken().then(
+  return usersProfilesService.refreshToken().then(
     (freshUser) => {
       dispatch(success(freshUser));
       dispatch(addInfo("Token refreshed"));
@@ -87,42 +87,19 @@ const refreshToken = (user) => (dispatch) => {
   );
 };
 
-const getAllUsers = (token) => {
-  const request = () => {
-    return { type: usersAT.GET_ALL_USERS_REQUEST };
-  };
-  const success = (users) => {
-    return { type: usersAT.GET_ALL_USERS_SUCCESS, users };
-  };
-  const failure = () => {
-    return { type: usersAT.GET_ALL_USERS_FAILURE };
-  };
-
-  return (dispatch) => {
-    dispatch(request());
-    usersService.getAllUsers(token).then(
-      (users) => dispatch(success(users)),
-      (error) => {
-        dispatch(failure());
-        dispatch(addError(error));
-      }
-    );
-  };
-};
-
-const getAllProfiles = (userId, token) => {
+const fetchProfiles = (userId, token) => {
   const request = () => {
     return { type: usersAT.GET_ALL_PROFILES_REQUEST };
   };
   const success = (profiles) => {
-    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles };
+    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
   };
   const failure = () => {
     return { type: usersAT.GET_ALL_PROFILES_FAILURE };
   };
   return (dispatch) => {
     dispatch(request());
-    usersService.getAllProfiles(userId, token).then(
+    usersProfilesService.getAllProfiles(userId, token).then(
       (profiles) => {
         dispatch(success(profiles));
       },
@@ -134,9 +111,83 @@ const getAllProfiles = (userId, token) => {
   };
 };
 
-export const usersActions = {
-  getAllProfiles,
-  getAllUsers,
+const createProfile = (userId, token) => {
+  const request = () => {
+    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
+  };
+  const success = (profiles) => {
+    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
+  };
+  const failure = () => {
+    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+  };
+  return (dispatch) => {
+    dispatch(request());
+    usersProfilesService.getAllProfiles(userId, token).then(
+      (profiles) => {
+        dispatch(success(profiles));
+      },
+      (error) => {
+        dispatch(failure());
+        dispatch(addError(error));
+      }
+    );
+  };
+};
+
+const updateProfile = (userId, token) => {
+  const request = () => {
+    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
+  };
+  const success = (profiles) => {
+    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
+  };
+  const failure = () => {
+    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+  };
+  return (dispatch) => {
+    dispatch(request());
+    usersProfilesService.getAllProfiles(userId, token).then(
+      (profiles) => {
+        dispatch(success(profiles));
+      },
+      (error) => {
+        dispatch(failure());
+        dispatch(addError(error));
+      }
+    );
+  };
+};
+
+const deleteProfile = (userId, token) => {
+  const request = () => {
+    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
+  };
+  const success = (profiles) => {
+    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
+  };
+  const failure = () => {
+    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+  };
+  return (dispatch) => {
+    dispatch(request());
+    usersProfilesService.getAllProfiles(userId, token).then(
+      (profiles) => {
+        dispatch(success(profiles));
+      },
+      (error) => {
+        dispatch(failure());
+        dispatch(addError(error));
+      }
+    );
+  };
+};
+
+export const userActions = {
+  fetchProfiles,
+  createProfile,
+  deleteProfile,
+  updateProfile,
   login,
   logout,
   refreshToken,

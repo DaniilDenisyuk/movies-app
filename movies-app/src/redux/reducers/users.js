@@ -1,4 +1,4 @@
-import usersAT from "../actionTypes/users";
+import usersAT from "../actionTypes/user";
 const initialState = {
   list: [],
   isLoading: false,
@@ -11,13 +11,11 @@ const users = (state = initialState, action) => {
         isLoading: true,
       };
     }
-    case usersAT.GET_ALL_USERS_SUCCESS: {
-      const { users } = action.payload;
+    case usersAT.GET_ALL_USERS_SUCCESS:
       return {
-        list: users,
-        isLoading: false,
+        list: action.users,
       };
-    }
+
     case usersAT.GET_ALL_USERS_FAILURE: {
       return {
         isLoading: false,

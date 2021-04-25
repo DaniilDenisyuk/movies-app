@@ -1,17 +1,13 @@
-import { Route, Switch } from "react-router-dom";
-import { UserInfo, Profiles, Statistic, Users } from "../pages";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { User, Users, Dashboard } from "../pages";
 
 const AdminSwitch = ({ match }) => {
   return (
     <Switch>
-      <Route exact path={`${match.url}/users`} children={<Users />} />
-      <Route exact path={`${match.url}/users/:id`} children={<UserInfo />} />
-      <Route
-        exact
-        path={`${match.url}/users/:id/profiles`}
-        children={<Profiles />}
-      />
-      <Route exact path={`${match.url}/statistic`} children={<Statistic />} />
+      <Route exact path={`${match.path}/users`} children={<Users />} />
+      <Route exact path={`${match.path}/users/:id`} children={<User />} />
+      <Route exact path={`${match.path}/dashboard`} children={<Dashboard />} />
+      <Redirect to={`${match.path}/dashboard`} />
     </Switch>
   );
 };

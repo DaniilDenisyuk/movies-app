@@ -1,11 +1,11 @@
 import "Dashboard.scss";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { getDashboard } from "../../redux/selectors";
 
-const Dashboard = ({
-  usersCount,
-  profilesCount,
-  profilesOver18,
-}) => {
+const Dashboard = () => {
+  const { usersCount, profilesCount, profilesOver18 } = useSelector(
+    getDashboard
+  );
   return (
     <div className="dashboard">
       <section className="dashboard__section">
@@ -24,10 +24,4 @@ const Dashboard = ({
   );
 };
 
-const mapState = (state) => {
-  const { usersCount, profilesCount, profilesOver18 } = state.dashboard;
-  return { usersCount, profilesCount, profilesOver18 };
-};
-const mapDispatch = {};
-
-export default connect(mapState)(Dashboard);
+export default Dashboard;

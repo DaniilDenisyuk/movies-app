@@ -1,15 +1,10 @@
 import { Route, Redirect } from "react-router-dom";
 import Loading from "../Loading";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { getUser } from "../../redux/selectors";
 
-const PrivateRoute = ({
-  component: Component,
-  roles,
-  user,
-  isLoggedIn,
-  isLoggingIn,
-  ...rest
-}) => {
+const PrivateRoute = ({ component: Component, roles, ...rest }) => {
+  const { user, isLoggedIn, isLoggingIn } = useSelector(getUser);
   if (isLoggingIn) {
     return <Loading message="Вход" />;
   }
@@ -22,9 +17,4 @@ const PrivateRoute = ({
   return <Redirect to="/login" />;
 };
 
-const mapState = (state) => {
-  const { isLoggingIn, isLoggedIn, user } = state.auth;
-  return { isLoggingIn, isLoggedIn, user };
-};
-
-export default connect(mapState)(PrivateRoute);
+export default PrivateRoute;

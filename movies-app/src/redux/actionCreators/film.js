@@ -1,5 +1,5 @@
 import filmsAT from "../actionTypes/films";
-import { messagesActions } from "./messages";
+import { messagesActions } from "./message";
 import { filmsService } from "../../services";
 
 const { addError, addInfo, addSuccess } = messagesActions;
@@ -88,7 +88,7 @@ const removeFilm = (id) => (dispatch) => {
     });
 };
 
-export const filmsActions = {
+export const filmActions = {
   addFilm,
   filmsLoading,
   removeFilm,

@@ -1,6 +1,13 @@
-import usersAT from "../actionTypes/users";
+import usersAT from "../actionTypes/user";
 
-const authentication = (state = {}, action) => {
+const initialState = {
+  isLoggedIn: false,
+  user: {},
+  isRegistering: false,
+  isLoggingIn: false,
+};
+
+const authentication = (state = initialState, action) => {
   switch (action.type) {
     case usersAT.LOGIN_REQUEST:
       return {

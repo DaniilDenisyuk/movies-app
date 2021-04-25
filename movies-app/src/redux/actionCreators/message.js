@@ -15,7 +15,7 @@ const addSuccess = (message) => ({
   payload: { message },
 });
 
-export const messagesActions = {
+export const messageActions = {
   addError,
   addInfo,
   addSuccess,

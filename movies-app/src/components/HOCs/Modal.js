@@ -4,8 +4,7 @@ import cn from "classnames";
 import "./Modal.scss";
 
 const ModalHOC = (Component) => {
-  const Modal = (props) => {
-    const { className, handleClose, ...rest } = props;
+  const Modal = ({ className, handleClose, ...rest }) => {
     const bodyRef = useRef();
     useClickOutside(bodyRef, handleClose);
     useDisableScroll();

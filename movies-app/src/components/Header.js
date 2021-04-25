@@ -3,15 +3,11 @@ import "./Header.scss";
 import { Link, useLocation } from "react-router-dom";
 import Button from "./Button";
 import Loading from "./Loading";
-import { useEffect } from "react";
 import { connect } from "react-redux";
-import { refreshToken, logout } from "../redux/actionCreators/users";
+import { logout } from "../redux/actionCreators/user";
 
-const Header = ({ refreshToken, logout, user, isLoggingIn, isLoggedIn }) => {
+const Header = ({ logout, user, isLoggingIn, isLoggedIn }) => {
   const location = useLocation();
-  useEffect(() => {
-    refreshToken();
-  }, [refreshToken]);
   return (
     <header className="header">
       <h2 className="header__heading">Movies viewer</h2>

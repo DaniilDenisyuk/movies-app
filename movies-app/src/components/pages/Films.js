@@ -14,7 +14,7 @@ import {
   postFile,
   setOrder,
   setSorting,
-} from "../../redux/actionCreators/films";
+} from "../../redux/actionCreators/film";
 
 const filterByKey = (list, key, value) =>
   list.filter((li) => li[key].toUpperCase().includes(value.toUpperCase()));

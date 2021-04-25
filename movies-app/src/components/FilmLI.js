@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { connect } from "react-redux";
-import { removeFilm } from "../redux/actionCreators/films";
+import { removeFilm } from "../redux/actionCreators/film";
 import { FilmInfoModal, ConfirmModal } from "./modals";
 import { useState } from "react";
 

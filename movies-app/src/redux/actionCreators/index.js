@@ -1,3 +1,4 @@
-export * from "./films";
-export * from "./messages";
-export * from "./users";
+export * from "./film";
+export * from "./message";
+export * from "./user";
+export * from "./admin";

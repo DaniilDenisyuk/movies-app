@@ -2,9 +2,8 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import cn from "classnames";
 import Button from "../Button";
-import { email, mediumPassword } from "../../helpers/validations";
 
-export const RegisterForm = ({
+export const UserForm = ({
   handleSubmit,
   submitComponent: Component,
   submitMessage,
@@ -12,42 +11,39 @@ export const RegisterForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
-    handleSubmit: fromSubmit,
+    handleSubmit: formSubmit,
     formState: { errors },
-  } = useForm({ mode: "onBlur", defaultValues: { email: "", password: "" } });
+  } = useForm({ mode: "onBlur", defaultValues: { login: "", password: "" } });
   const onSubmit = async (data, e) => {
     setIsSubmitting(true);
     await handleSubmit(data);
     setIsSubmitting(false);
   };
   const onError = (errors, e) => console.log(errors, e);
-
   return (
-    <form onSubmit={fromSubmit(onSubmit, onError)} className="form">
-      <h2 className="form__heading">Регистрация</h2>
+    <form onSubmit={formSubmit(onSubmit, onError)} className="form">
+      <h2 className="form__heading">Редактирование профиля</h2>
       <div className="form__group">
+        <p className="form__label">Имя</p>
         <input
           type="text"
-          placeholder="Email"
-          {...register("email", {
-            required: "required",
-            validate: email,
-          })}
+          placeholder="Ваш логин"
+          {...register("login", { required: "required" })}
           className={cn("form__input", {
-            "form__input--invalid": errors.email,
+            "form__input--invalid": errors.login,
           })}
         />
-        {errors.email && (
-          <p className="form__error-message">{errors.email.message}</p>
+        {errors.login && (
+          <p className="form__error-message">{errors.login.message}</p>
         )}
       </div>
       <div className="form__group">
+        <p className="form__label">Пол</p>
         <input
           type="password"
           placeholder="Пароль"
           {...register("password", {
             required: "required",
-            validate: mediumPassword,
           })}
           className={cn("form__input", {
             "form__input--invalid": errors.password,
@@ -64,12 +60,13 @@ export const RegisterForm = ({
           ) : submitMessage ? (
             submitMessage
           ) : (
-            "Регистрация..."
+            "Вход..."
           )
         ) : (
-          "Зарегистрироваться"
+          "Войти"
         )}
       </Button>
+      <Button />
     </form>
   );
 };

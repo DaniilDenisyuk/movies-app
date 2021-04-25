@@ -3,7 +3,7 @@ import AdminSwitch from "./AdminSwitch";
 import { PrivateRoute } from "./PrivateRoute";
 import { AuthFormModal, RegistrFormModal } from "../modals";
 import { ROLES } from "../../shared/roles";
-import { login, register } from "../../redux/actionCreators/users";
+import { login, register } from "../../redux/actionCreators/user";
 
 import { connect } from "react-redux";
 import {
@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import Loading from "../Loading";
 
-const PagesSwitch = ({ login, register }) => {
+const MainSwitch = ({ login, register }) => {
   const location = useLocation();
   const history = useHistory();
   const background = location.state && location.state.background;
@@ -95,4 +95,4 @@ const mapDispatch = {
   register,
 };
 
-export default connect(null, mapDispatch)(PagesSwitch);
+export default connect(null, mapDispatch)(MainSwitch);

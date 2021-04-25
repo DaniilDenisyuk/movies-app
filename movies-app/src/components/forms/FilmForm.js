@@ -7,7 +7,7 @@ import {
   limitSpecialChars,
   limitNumbers,
   uniqueNames,
-} from "../../shared/validations";
+} from "../../helpers/validations";
 
 export const FilmForm = ({ handleSubmit }) => {
   const [title, setTitle] = useState({

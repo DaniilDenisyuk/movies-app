@@ -3,9 +3,12 @@ import { useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { PagesSwitch } from "./switches";
-import {} from "../redux/actionCreators";
+import { dashboardActions, usersActions } from "../redux/actionCreators";
 
 const Main = ({ fetchDashboardInfo, refreshToken }) => {
+  useEffect(() => {
+    refreshToken();
+  }, [refreshToken]);
   useEffect(() => {
     fetchDashboardInfo();
     let fetchInterval = setInterval(fetchDashboardInfo, 1000 * 60 * 3);
@@ -13,7 +16,6 @@ const Main = ({ fetchDashboardInfo, refreshToken }) => {
       clearInterval(fetchInterval);
     };
   }, [fetchDashboardInfo]);
-
   return (
     <div className="app">
       <Header />
@@ -32,11 +34,8 @@ const mapState = (state) => {
 };
 
 const mapDispatch = {
-  fetchFilms,
-  postFilm,
-  postFilmsFile: postFile,
-  setOrder,
-  setSorting,
+  fetchDashboardInfo: dashboardActions.fetchDashboardInfo,
+  refreshToken: usersActions.refreshToken,
 };
 
-export default Main;
+export default connect(mapState, mapDispatch)(Main);

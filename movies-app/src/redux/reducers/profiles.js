@@ -1,4 +1,4 @@
-import usersAT from "../actionTypes/users";
+import usersAT from "../actionTypes/user";
 
 const initialState = {
   list: [],
@@ -13,10 +13,8 @@ const profiles = (state = initialState, action) => {
       };
     }
     case usersAT.GET_ALL_PROFILES_SUCCESS: {
-      const { profiles } = action.payload;
       return {
-        list: profiles,
-        isLoading: false,
+        list: action.profiles,
       };
     }
     case usersAT.GET_ALL_PROFILES_FAILURE: {
