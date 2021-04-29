@@ -1,9 +1,9 @@
 import usersAT from "../actionTypes/user";
-import { usersProfilesService } from "../../services";
+import { userService, authService } from "../../services";
 import { messagesActions } from "./message";
 const { addError, addInfo, addSuccess } = messagesActions;
 
-const login = (username, password) => (dispatch) => {
+const login = (email, password) => (dispatch) => {
   const request = (user) => {
     return { type: usersAT.LOGIN_REQUEST, user };
   };
@@ -14,9 +14,9 @@ const login = (username, password) => (dispatch) => {
     return { type: usersAT.LOGIN_FAILURE };
   };
 
-  dispatch(request(username));
+  dispatch(request(email));
 
-  return usersProfilesService.login(username, password).then(
+  return authService.login(email, password).then(
     (user) => {
       dispatch(success(user));
     },
@@ -27,7 +27,7 @@ const login = (username, password) => (dispatch) => {
   );
 };
 
-const register = (username, password) => (dispatch) => {
+const register = (userInfo) => (dispatch) => {
   const request = () => {
     return { type: usersAT.REGISTER_REQUEST };
   };
@@ -40,7 +40,7 @@ const register = (username, password) => (dispatch) => {
 
   dispatch(request());
 
-  return usersProfilesService.register(username, password).then(
+  return authService.register(userInfo).then(
     () => {
       dispatch(success());
       dispatch(addSuccess("Succesfully registered"));
@@ -53,7 +53,7 @@ const register = (username, password) => (dispatch) => {
 };
 
 const logout = (token) => (dispatch) => {
-  return usersProfilesService.logout(token).then(
+  return authService.logout(token).then(
     () => {
       dispatch({ type: usersAT.LOGOUT });
       dispatch(addInfo("Logged out"));

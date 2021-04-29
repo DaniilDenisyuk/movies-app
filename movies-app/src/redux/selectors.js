@@ -26,3 +26,5 @@ export const getUser = (store) => {
 };
 
 export const getMessage = (store) => store.message;
+
+export const getToken = (store) => store.auth.jwt;

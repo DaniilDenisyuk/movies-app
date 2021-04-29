@@ -1,2 +1,3 @@
-export * from "./usersProfilesService";
-export * from "./moviesService";
+export * from "./userService";
+export * from "./adminService";
+export * from "./authService";

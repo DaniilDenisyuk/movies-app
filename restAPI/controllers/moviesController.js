@@ -1,13 +1,15 @@
 import { Router } from "express";
 import { readFile } from "fs/promises";
-import { parseMovies } from "../../utils/parseMovies.js";
+import { parseMovies } from "../common/utils/parseMovies.js";
 import {
   readAll,
   removeById,
   create,
   createBunch,
-} from "../../dbAPI/movie/index.js";
+} from "../common/db/queries/movies/index.js.js.js.js.js.js.js";
 import multer from "multer";
+
+const moviesRoute = Router();
 
 const DIR = "./uploads/";
 
@@ -31,8 +33,6 @@ const upload = multer({
     }
   },
 });
-
-const moviesRoute = Router();
 
 const getAllFilms = (req, res) => {
   const db = req.app.get("db");

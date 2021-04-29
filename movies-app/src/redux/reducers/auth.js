@@ -3,6 +3,7 @@ import usersAT from "../actionTypes/user";
 const initialState = {
   isLoggedIn: false,
   user: {},
+  jwt: null,
   isRegistering: false,
   isLoggingIn: false,
 };
@@ -18,6 +19,7 @@ const authentication = (state = initialState, action) => {
       return {
         isLoggedIn: true,
         user: action.user,
+        jwt: action.jwt,
       };
     case usersAT.LOGIN_FAILURE:
       return {};

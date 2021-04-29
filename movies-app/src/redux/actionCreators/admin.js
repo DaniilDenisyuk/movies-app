@@ -1,9 +1,9 @@
 import adminAT from "../actionTypes/admin";
-import { messagesActions } from "./message";
-import { usersProfilesService } from "../../services";
-const { addError } = messagesActions;
+import { messageActions } from "./message";
+import { adminService } from "../../services";
+const { addError } = messageActions;
 
-const fetchUsers = (token) => {
+const getAllUsers = (token) => {
   const request = () => {
     return { type: adminAT.GET_ALL_USERS_REQUEST };
   };
@@ -16,7 +16,7 @@ const fetchUsers = (token) => {
 
   return (dispatch) => {
     dispatch(request());
-    usersProfilesService.getAllUsers(token).then(
+    adminService.getAllUsers(token).then(
       (users) => dispatch(success(users)),
       (error) => {
         dispatch(failure());
@@ -26,7 +26,7 @@ const fetchUsers = (token) => {
   };
 };
 
-const fetchUserProfiles = (token, userId) => {
+const getUserProfiles = (token, userId) => (dispatch) => {
   const request = () => {
     return { type: adminAT.GET_USER_PROFILES_REQUEST };
   };
@@ -39,7 +39,7 @@ const fetchUserProfiles = (token, userId) => {
 
   return (dispatch) => {
     dispatch(request());
-    usersProfilesService.getAllUsers(token, userId).then(
+    adminService.getUserProfiles(token, userId).then(
       (profiles) => dispatch(success(profiles, userId)),
       (error) => {
         dispatch(failure());
@@ -49,7 +49,7 @@ const fetchUserProfiles = (token, userId) => {
   };
 };
 
-const fetchDashboard = (token) => (dispatch) => {
+const getDashboard = (token) => (dispatch) => {
   const request = () => {
     return { type: adminAT.GET_DASHBOARD_REQUEST };
   };
@@ -60,7 +60,7 @@ const fetchDashboard = (token) => (dispatch) => {
     return { type: adminAT.GET_DASHBOARD_FAILURE };
   };
   dispatch(request());
-  return usersProfilesService.getDashboardInfo(token).then(
+  return adminService.getDashboard(token).then(
     (dashboard) => dispatch(success(dashboard)),
     (error) => {
       dispatch(failure());
@@ -69,120 +69,80 @@ const fetchDashboard = (token) => (dispatch) => {
   );
 };
 
-const createUserProfile = (profile, token) => {
-  const request = () => {
-    return { type: adminAT.CREATE_USER_PROFILE };
-  };
-  const success = (profiles) => {
-    return { type: adminAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
-  };
-  const failure = () => {
-    return { type: adminAT.GET_ALL_PROFILES_FAILURE };
+const createUserProfile = (token, userId, profile) => {
+  const success = (userId, profile) => {
+    return { type: adminAT.CREATE_USER_PROFILE, profile, userId };
   };
   return (dispatch) => {
-    dispatch(request());
-    usersProfilesService.getAllProfiles(userId, token).then(
-      (profiles) => {
-        dispatch(success(profiles));
+    adminService.createUserProfile(token, userId, profile).then(
+      (newProfile) => {
+        dispatch(success(userId, newProfile));
       },
       (error) => {
-        dispatch(failure());
         dispatch(addError(error));
       }
     );
   };
 };
 
-const updateUserProfile = (userId, token) => {
-  const request = () => {
-    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
-  };
-  const success = (profiles) => {
-    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
-  };
-  const failure = () => {
-    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+const updateUserProfile = (token, userId, profileId, profile) => {
+  const success = (profile) => {
+    return { type: adminAT.UPDATE_USER_PROFILE, userId, profileId, profile };
   };
   return (dispatch) => {
-    dispatch(request());
-    usersProfilesService.getAllProfiles(userId, token).then(
-      (profiles) => {
-        dispatch(success(profiles));
+    adminService.updateUserProfile(token, userId, profileId, profile).then(
+      (updatedProfile) => {
+        dispatch(success(updatedProfile));
       },
       (error) => {
-        dispatch(failure());
         dispatch(addError(error));
       }
     );
   };
 };
 
-const deleteUserProfile = (userId, token) => {
-  const request = () => {
-    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
-  };
-  const success = (profiles) => {
-    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
-  };
-  const failure = () => {
-    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+const deleteUserProfile = (token, userId, profileId) => {
+  const success = () => {
+    return { type: adminAT.DELETE_USER_PROFILE, userId, profileId };
   };
   return (dispatch) => {
-    dispatch(request());
-    usersProfilesService.getAllProfiles(userId, token).then(
-      (profiles) => {
-        dispatch(success(profiles));
+    adminService.deleteUserProfile(token, userId, profileId).then(
+      () => {
+        dispatch(success());
       },
       (error) => {
-        dispatch(failure());
         dispatch(addError(error));
       }
     );
   };
 };
 
-const deleteUser = (userId, token) => {
-  const request = () => {
-    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
-  };
-  const success = (profiles) => {
-    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
-  };
-  const failure = () => {
-    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+const deleteUser = (token, userId) => {
+  const success = () => {
+    return { type: adminAT.DELETE_USER, userId };
   };
   return (dispatch) => {
-    dispatch(request());
-    usersProfilesService.getAllProfiles(userId, token).then(
-      (profiles) => {
-        dispatch(success(profiles));
+    adminService.deleteUser(token, userId).then(
+      () => {
+        dispatch(success());
       },
       (error) => {
-        dispatch(failure());
         dispatch(addError(error));
       }
     );
   };
 };
 
-const updateUser = (userId, token) => {
-  const request = () => {
-    return { type: usersAT.GET_ALL_PROFILES_REQUEST };
-  };
-  const success = (profiles) => {
-    return { type: usersAT.GET_ALL_PROFILES_SUCCESS, profiles, userId };
-  };
-  const failure = () => {
-    return { type: usersAT.GET_ALL_PROFILES_FAILURE };
+const updateUser = (token, userId, user) => {
+  const success = (user) => {
+    return { type: adminAT.UPDATE_USER, userId, user };
   };
   return (dispatch) => {
-    dispatch(request());
-    usersProfilesService.getAllProfiles(userId, token).then(
-      (profiles) => {
-        dispatch(success(profiles));
+    adminService.updateUser(token, userId, user).then(
+      () => {
+        dispatch(success());
       },
       (error) => {
-        dispatch(failure());
         dispatch(addError(error));
       }
     );
@@ -190,9 +150,9 @@ const updateUser = (userId, token) => {
 };
 
 export const adminActions = {
-  fetchDashboard,
-  fetchUserProfiles,
-  fetchUsers,
+  getDashboard,
+  getUserProfiles,
+  getAllUsers,
   createUserProfile,
   updateUserProfile,
   updateUser,
