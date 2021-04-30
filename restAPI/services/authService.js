@@ -1,96 +1,102 @@
-import jwt from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import cryptoRandomString from "crypto-random-string";
-import queryBuilder from "../common/db/queryBuilder.js";
+import crypto from "crypto";
+import { promisify } from "util";
 import { usersService } from "./usersService";
 import redis from "redis";
+import dotenv from "dotenv";
 
-const client = redis.createClient()
+dotenv.config();
+
+const jwt = { sign: jsonwebtoken.sign, verify: promisify(jsonwebtoken.verify) };
+
+const redisClient = redis.createClient();
 
 const authenticate = async ({ login, password, ipAddress }) => {
-  const sql = queryBuilder.select("Users");
   const user = await usersService.getUserByLogin(login);
   if (!user || !bcrypt.compare(password, user.password)) {
     throw "Username or password is incorrect";
   }
 
-  const jwtToken = generateJwtToken(user);
-  const refreshToken = generateRefreshToken(user, ipAddress);
+  const jwToken = generateJwtToken(
+    user.id,
+    user.username || user.email,
+    user.role,
+    ipAddress
+  );
+  const refreshToken = generateRefreshToken(
+    user.id,
+    user.username || user.email,
+    user.role,
+    ipAddress
+  );
 
   return {
     user,
-    jwtToken,
-    refreshToken: refreshToken.token,
+    jwt: jwToken,
+    refreshToken,
   };
 };
 
 const refreshToken = async ({ token, ipAddress }) => {
-  const refreshToken = await getRefreshToken(token);
-  const { user } = refreshToken;
+  const refreshToken = await verifyRefreshToken(token);
 
-  // replace old refresh token with a new one and save
-  const newRefreshToken = generateRefreshToken(user, ipAddress);
-  refreshToken.revoked = Date.now();
-  refreshToken.revokedByIp = ipAddress;
-  refreshToken.replacedByToken = newRefreshToken.token;
-  await refreshToken.save();
-  await newRefreshToken.save();
+  const { sub, name, role } = refreshToken;
 
-  // generate new jwt
-  const jwtToken = generateJwtToken(user);
+  const newRefreshToken = generateRefreshToken(sub, name, role, ipAddress);
 
-  // return basic details and tokens
+  const jwToken = generateJwtToken(sub, name, role, ipAddress);
+
   return {
-    ...basicDetails(user),
-    jwtToken,
+    user: { id: sub, username: name, role },
+    jwt: jwToken,
     refreshToken: newRefreshToken.token,
   };
 };
 
-const revokeToken = async ({ token, ipAddress }) => {
-  const refreshToken = await getRefreshToken(token);
+const revokeToken = async ({ token }) => {
+  const refreshToken = await verifyRefreshToken(token);
+  const expiry = refreshToken.exp - Math.floor(Date.now() / 1000);
+  redisClient.set(refreshToken.jti, true, "EX", expiry);
+};
 
-  if (await this.redis.exists(accessToken)) {}
-  refreshToken.revoked = Date.now();
-  refreshToken.revokedByIp = ipAddress;
-  await refreshToken.save();
+const verifyToken = async (token) =>
+  jwt.verify(token, process.env.TOKEN_SECRET);
 
-}
+const verifyRefreshToken = async (token) => {
+  const refreshToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+  if (redisClient.exists(accessToken)) {
+    throw { status: 401, message: "Token revoked" };
+  }
+};
 
-const getRefreshTokens = (userId) => {
-  // check that user exists
-  const user = await usersService.getUser(userId);
-  if (!user) throw "User not found";
-
-  // return refresh tokens for user
-  const refreshTokens = await db.RefreshToken.find({ user: userId });
-  return refreshTokens;
-}
-
-const getRefreshToken = async (token) => {
-  const refreshToken = await db.RefreshToken.findOne({ token }).populate(
-    "user"
+const generateJwtToken = (userId, userName, userRole, ipAddress) =>
+  jwt.sign(
+    { sub: userId, name: userName, role: userRole, ipAddress },
+    process.env.TOKEN_SECRET,
+    {
+      expiresIn: "10m",
+    }
   );
-  if (!refreshToken || !refreshToken.isActive) throw "Invalid token";
-  return refreshToken;
-}
 
-const generateJwtToken = (user) => {
-  return jwt.sign({ sub: user.id, id: user.id }, config.secret, {
-    expiresIn: "15m",
-  });
-}
+const generateRefreshToken = (userId, userName, userRole, ipAddress) =>
+  jwt.sign(
+    { sub: userId, name: userName, role: userRole, ipAddress },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: "30d",
+      jwtid: randomString(),
+    }
+  );
 
-const generateRefreshToken  = async (user, ipAddress) => {
-  // create a refresh token that expires in 7 days
-  return new db.RefreshToken({
-    user: user.id,
-    token: randomTokenString(),
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    createdByIp: ipAddress,
-  });
-}
+const randomString = () => {
+  return crypto.randomBytes(64).toString("hex");
+};
 
-const randomTokenString = () => {
-  return cryptoRandomString({ length: 40 });
-}
+export const authService = {
+  verifyToken,
+  verifyRefreshToken,
+  authenticate,
+  refreshToken,
+  revokeToken,
+};

@@ -9,7 +9,7 @@ import {
 } from "../common/db/queries/movies/index.js.js.js.js.js.js.js";
 import multer from "multer";
 
-const moviesRoute = Router();
+const moviesController = Router();
 
 const DIR = "./uploads/";
 
@@ -97,12 +97,12 @@ const deleteFilm = (req, res) => {
 
 const getFilmById = (req, res) => {};
 
-moviesRoute.get("/", getAllFilms);
-moviesRoute.get("/:id", getFilmById);
+moviesController.get("/", getAllFilms);
+moviesController.get("/:id", getFilmById);
 
-moviesRoute.post("/", createFilm);
-moviesRoute.post("/upload", upload.single("file"), uploadFilms);
+moviesController.post("/", createFilm);
+moviesController.post("/upload", upload.single("file"), uploadFilms);
 
-moviesRoute.delete("/:id", deleteFilm);
+moviesController.delete("/:id", deleteFilm);
 
-export default moviesRoute;
+export { moviesController };
