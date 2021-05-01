@@ -2,9 +2,10 @@ import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { promisify } from "util";
-import { usersService } from "./usersService";
 import redis from "redis";
 import dotenv from "dotenv";
+import { usersService } from "./usersService";
+import { UnathorizedError, ValidationError } from "../common/errorTypes";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ const redisClient = redis.createClient();
 const authenticate = async ({ login, password, ipAddress }) => {
   const user = await usersService.getUserByLogin(login);
   if (!user || !bcrypt.compare(password, user.password)) {
-    throw "Username or password is incorrect";
+    throw new ValidationError("Username or password is incorrect");
   }
 
   const jwToken = generateJwtToken(
@@ -32,25 +33,33 @@ const authenticate = async ({ login, password, ipAddress }) => {
   );
 
   return {
-    user,
+    ...basicFields(user),
     jwt: jwToken,
     refreshToken,
   };
 };
 
 const refreshToken = async ({ token, ipAddress }) => {
-  const refreshToken = await verifyRefreshToken(token);
+  const basicInfo = await verifyRefreshToken(token);
 
-  const { sub, name, role } = refreshToken;
+  const newRefreshToken = generateRefreshToken(
+    basicInfo.id,
+    basicInfo.username,
+    basicInfo.role,
+    ipAddress
+  );
 
-  const newRefreshToken = generateRefreshToken(sub, name, role, ipAddress);
-
-  const jwToken = generateJwtToken(sub, name, role, ipAddress);
+  const jwToken = generateJwtToken(
+    basicInfo.id,
+    basicInfo.username,
+    basicInfo.role,
+    ipAddress
+  );
 
   return {
-    user: { id: sub, username: name, role },
+    ...basicFields(basicInfo),
     jwt: jwToken,
-    refreshToken: newRefreshToken.token,
+    refreshToken: newRefreshToken,
   };
 };
 
@@ -65,14 +74,15 @@ const verifyToken = async (token) =>
 
 const verifyRefreshToken = async (token) => {
   const refreshToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-  if (redisClient.exists(accessToken)) {
-    throw { status: 401, message: "Token revoked" };
+  if (redisClient.exists(refreshToken.jti)) {
+    throw new UnathorizedError("Token revoked");
   }
+  return refreshToken;
 };
 
 const generateJwtToken = (userId, userName, userRole, ipAddress) =>
   jwt.sign(
-    { sub: userId, name: userName, role: userRole, ipAddress },
+    { sub: userId, id: userId, username: userName, role: userRole, ipAddress },
     process.env.TOKEN_SECRET,
     {
       expiresIn: "10m",
@@ -81,7 +91,7 @@ const generateJwtToken = (userId, userName, userRole, ipAddress) =>
 
 const generateRefreshToken = (userId, userName, userRole, ipAddress) =>
   jwt.sign(
-    { sub: userId, name: userName, role: userRole, ipAddress },
+    { sub: userId, id: userId, username: userName, role: userRole, ipAddress },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "30d",
@@ -92,6 +102,12 @@ const generateRefreshToken = (userId, userName, userRole, ipAddress) =>
 const randomString = () => {
   return crypto.randomBytes(64).toString("hex");
 };
+
+const basicFields = (user) => ({
+  id: user.id,
+  username: user.username || user.email,
+  role: user.role,
+});
 
 export const authService = {
   verifyToken,

@@ -1,4 +1,4 @@
 export const logErrors = (err, req, res, next) => {
-  console.error(err.stack);
+  console.error(err.error || err.message);
   next(err);
 };

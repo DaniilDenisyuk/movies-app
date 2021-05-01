@@ -27,7 +27,7 @@ app.use(express.json());
 app.use("/api/movies", moviesController);
 app.use("/api/users", usersController);
 app.use("/api/profiles", profilesController);
-app.use("/api/auth", authController);
+app.use("/auth", authController);
 app.use("/api/admin", authorize(ROLES.Admin), adminController);
 app.use(logErrors);
 app.use(errorHandler);
