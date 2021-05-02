@@ -4,8 +4,8 @@ import crypto from "crypto";
 import { promisify } from "util";
 import redis from "redis";
 import dotenv from "dotenv";
-import { usersService } from "./usersService";
-import { UnathorizedError, ValidationError } from "../common/errorTypes";
+import { usersService } from "./usersService.js";
+import { UnathorizedError, ValidationError } from "../common/errorTypes.js";
 
 dotenv.config();
 
@@ -13,10 +13,16 @@ const jwt = { sign: jsonwebtoken.sign, verify: promisify(jsonwebtoken.verify) };
 
 const redisClient = redis.createClient();
 
+const Redis = {
+  get: promisify(redisClient.get.bind(redisClient)),
+  set: promisify(redisClient.set.bind(redisClient)),
+  exists: promisify(redisClient.exists.bind(redisClient)),
+};
+
 const authenticate = async ({ login, password, ipAddress }) => {
   const user = await usersService.getUserByLogin(login);
   if (!user || !bcrypt.compare(password, user.password)) {
-    throw new ValidationError("Username or password is incorrect");
+    throw ValidationError("Username or password is incorrect");
   }
 
   const jwToken = generateJwtToken(
@@ -41,7 +47,6 @@ const authenticate = async ({ login, password, ipAddress }) => {
 
 const refreshToken = async ({ token, ipAddress }) => {
   const basicInfo = await verifyRefreshToken(token);
-
   const newRefreshToken = generateRefreshToken(
     basicInfo.id,
     basicInfo.username,
@@ -66,16 +71,19 @@ const refreshToken = async ({ token, ipAddress }) => {
 const revokeToken = async ({ token }) => {
   const refreshToken = await verifyRefreshToken(token);
   const expiry = refreshToken.exp - Math.floor(Date.now() / 1000);
-  redisClient.set(refreshToken.jti, true, "EX", expiry);
+  await Redis.set(refreshToken.jti, true, "EX", expiry);
 };
 
 const verifyToken = async (token) =>
-  jwt.verify(token, process.env.TOKEN_SECRET);
+  await jwt.verify(token, process.env.TOKEN_SECRET);
 
 const verifyRefreshToken = async (token) => {
-  const refreshToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-  if (redisClient.exists(refreshToken.jti)) {
-    throw new UnathorizedError("Token revoked");
+  const refreshToken = await jwt.verify(
+    token,
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  if (await Redis.exists(refreshToken.jti)) {
+    throw UnathorizedError("Token revoked");
   }
   return refreshToken;
 };

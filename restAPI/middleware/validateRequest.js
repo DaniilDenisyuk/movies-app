@@ -10,7 +10,7 @@ export const validateRequest = (schema) => {
     const { error, value } = schema.validate(req.body, options);
     if (error) {
       next(
-        new ValidationError(`${error.details.map((x) => x.message).join(", ")}`)
+        ValidationError(`${error.details.map((x) => x.message).join(", ")}`)
       );
     } else {
       req.body = value;

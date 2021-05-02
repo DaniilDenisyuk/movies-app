@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authorize, validateRequest } from "../middleware/index.js";
-import { ValidationError } from "../common/errorTypes";
-import authSchema from "../common/schemas/auth";
+import { ValidationError } from "../common/errorTypes.js";
+import authSchema from "../common/schemas/auth.js";
 import { authService } from "../services/authService.js";
 
 const authController = Router();
@@ -19,7 +19,7 @@ const authenticate = (req, res, next) => {
 };
 
 const refreshToken = (req, res, next) => {
-  const token = req.cookies.refreshToken;
+  const token = req.body.refreshToken || req.cookies.refreshToken;
   const ipAddress = req.ip;
   authService
     .refreshToken({ token, ipAddress })
@@ -31,12 +31,11 @@ const refreshToken = (req, res, next) => {
 };
 
 const revokeToken = (req, res, next) => {
-  const token = req.cookies.refreshToken;
-  const ipAddress = req.ip;
-  if (!token) return next(new ValidationError("Token required"));
+  const token = req.body.refreshToken || req.cookies.refreshToken;
+  if (!token) return next(ValidationError("Token required"));
   authService
-    .revokeToken(token)
-    .then(res.json({ message: "Token revoked" }))
+    .revokeToken({ token })
+    .then(() => res.json({ message: "Token revoked" }))
     .catch(next);
 };
 

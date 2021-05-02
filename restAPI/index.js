@@ -1,15 +1,14 @@
 import express from "express";
 import cors from "cors";
 import { logErrors, errorHandler, authorize } from "./middleware/index.js";
-import role from "./common/roles";
+import role from "./common/roles.js";
 import {
-  adminController,
+  //adminController,
   authController,
-  moviesController,
-  profilesController,
-  usersController,
+  // moviesController,
+  //profilesController,
+  // usersController,
 } from "./controllers/index.js";
-import ROLES from "./common/roles";
 
 const port = process.env.PORT || 3005;
 
@@ -24,11 +23,11 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/api/movies", moviesController);
-app.use("/api/users", usersController);
-app.use("/api/profiles", profilesController);
+//app.use("/api/movies", moviesController);
+//app.use("/api/users", usersController);
+//app.use("/api/profiles", profilesController);
 app.use("/auth", authController);
-app.use("/api/admin", authorize(ROLES.Admin), adminController);
+//app.use("/api/admin", authorize(ROLES.Admin), adminController);
 app.use(logErrors);
 app.use(errorHandler);
 

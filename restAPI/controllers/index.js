@@ -1,5 +1,5 @@
-export * from "./authController";
-export * from "./moviesController";
-export * from "./profilesController";
-export * from "./usersController";
-export * from "./adminController";
+export * from "./authController.js";
+// export * from "./moviesController.js";
+// export * from "./profilesController.js";
+// export * from "./usersController.js";
+// export * from "./adminController.js";
